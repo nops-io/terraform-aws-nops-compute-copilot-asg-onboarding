@@ -3,10 +3,10 @@ resource "aws_cloudwatch_event_bus" "nops_asg_ec2_instance_state_change" {
 }
 
 resource "aws_cloudwatch_event_rule" "asg_ec2_spot_termination_warning" {
-  name          = "nops-asg-ec2-spot-termination-warning"
+  name           = "nops-asg-ec2-spot-termination-warning"
   event_bus_name = aws_cloudwatch_event_bus.nops_asg_ec2_instance_state_change.name
   event_pattern = jsonencode({
-    source       = ["aws.ec2"]
+    source        = ["aws.ec2"]
     "detail-type" = ["EC2 Spot Instance Interruption Warning"]
     detail = {
       "instance-action" = ["terminate"]
@@ -16,9 +16,9 @@ resource "aws_cloudwatch_event_rule" "asg_ec2_spot_termination_warning" {
 }
 
 resource "aws_cloudwatch_event_target" "asg_ec2_spot_termination_target" {
-  rule      = aws_cloudwatch_event_rule.asg_ec2_spot_termination_warning.name
-  target_id = aws_lambda_function.nops_nasg_lambda.function_name
-  arn       = aws_lambda_function.nops_nasg_lambda.arn
+  rule           = aws_cloudwatch_event_rule.asg_ec2_spot_termination_warning.name
+  target_id      = aws_lambda_function.nops_nasg_lambda.function_name
+  arn            = aws_lambda_function.nops_nasg_lambda.arn
   event_bus_name = aws_cloudwatch_event_bus.nops_asg_ec2_instance_state_change.name
 }
 
@@ -32,10 +32,10 @@ resource "aws_lambda_permission" "ec2_spot_termination_warning_permission" {
 
 # EventBridge Rule for EC2 Instance Launch Unsuccessful
 resource "aws_cloudwatch_event_rule" "ec2_instance_launch_unsuccessful" {
-  name          = "nops-asg-ec2-instance-launch-unsuccessful"
+  name           = "nops-asg-ec2-instance-launch-unsuccessful"
   event_bus_name = aws_cloudwatch_event_bus.nops_asg_ec2_instance_state_change.name
   event_pattern = jsonencode({
-    source       = ["aws.autoscaling"]
+    source        = ["aws.autoscaling"]
     "detail-type" = ["EC2 Instance Launch Unsuccessful"]
   })
   state = "ENABLED"
@@ -43,9 +43,9 @@ resource "aws_cloudwatch_event_rule" "ec2_instance_launch_unsuccessful" {
 
 # Target for EC2 Instance Launch Unsuccessful
 resource "aws_cloudwatch_event_target" "ec2_instance_launch_unsuccessful_target" {
-  rule      = aws_cloudwatch_event_rule.ec2_instance_launch_unsuccessful.name
-  target_id = aws_lambda_function.nops_nasg_lambda.function_name
-  arn       = aws_lambda_function.nops_nasg_lambda.arn
+  rule           = aws_cloudwatch_event_rule.ec2_instance_launch_unsuccessful.name
+  target_id      = aws_lambda_function.nops_nasg_lambda.function_name
+  arn            = aws_lambda_function.nops_nasg_lambda.arn
   event_bus_name = aws_cloudwatch_event_bus.nops_asg_ec2_instance_state_change.name
 }
 
@@ -67,9 +67,9 @@ resource "aws_cloudwatch_event_rule" "scheduled_check" {
 
 # Target for Scheduled Check
 resource "aws_cloudwatch_event_target" "scheduled_check_target" {
-  rule      = aws_cloudwatch_event_rule.scheduled_check.name
-  target_id = aws_lambda_function.nops_nasg_lambda.function_name
-  arn       = aws_lambda_function.nops_nasg_lambda.arn
+  rule           = aws_cloudwatch_event_rule.scheduled_check.name
+  target_id      = aws_lambda_function.nops_nasg_lambda.function_name
+  arn            = aws_lambda_function.nops_nasg_lambda.arn
   event_bus_name = "default"
 }
 
@@ -80,4 +80,3 @@ resource "aws_lambda_permission" "scheduled_check_permission" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.scheduled_check.arn
 }
-

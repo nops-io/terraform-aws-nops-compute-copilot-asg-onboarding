@@ -10,14 +10,14 @@ resource "aws_lambda_function" "nops_nasg_lambda" {
 
   environment {
     variables = {
-      STACK_NAME               = ""
-      STACK_REGION             = data.aws_region.current.id
-      NOPS_ASG_GATEWAY_HOST    = lookup(local.gateway_host, var.environment, local.gateway_host["prd"])
-      NOPS_ASG_PROJECT_ID      = local.current_nops_project[0].id
-      NOPS_ASG_ACCOUNT_NUMBER  = data.aws_caller_identity.current.account_id
-      NOPS_ASG_TOKEN           = var.token
-      NOPS_ASG_AUTO_UPDATE     = var.auto_update
-      NOPS_ASG_VERSION         = local.nasg_lambda_version
+      STACK_NAME              = ""
+      STACK_REGION            = data.aws_region.current.id
+      NOPS_ASG_GATEWAY_HOST   = lookup(local.gateway_host, var.environment, local.gateway_host["prd"])
+      NOPS_ASG_PROJECT_ID     = local.current_nops_project[0].id
+      NOPS_ASG_ACCOUNT_NUMBER = data.aws_caller_identity.current.account_id
+      NOPS_ASG_TOKEN          = var.token
+      NOPS_ASG_AUTO_UPDATE    = var.auto_update
+      NOPS_ASG_VERSION        = local.nasg_lambda_version
     }
   }
 
@@ -64,7 +64,7 @@ resource "aws_lambda_function" "nops_regions_checker_lambda" {
 
   environment {
     variables = {
-      ExcludeRegions: var.exclude_regions
+      ExcludeRegions : var.exclude_regions
     }
   }
 }
@@ -89,7 +89,7 @@ resource "aws_lambda_function" "nops_role_checker_lambda" {
 
   environment {
     variables = {
-      account_number: data.aws_caller_identity.current.account_id
+      account_number : data.aws_caller_identity.current.account_id
     }
   }
 }
