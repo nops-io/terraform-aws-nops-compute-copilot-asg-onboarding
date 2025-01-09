@@ -12,9 +12,9 @@ This wrapper does not implement any extra functionality.
 
 ```hcl
 terraform {
-  source = "tfr:///terraform-aws-modules/nops-compute-copilot-asg/aws//wrappers"
+  source = "tfr:///terraform-aws-modules/nops-compute-copilot-asg-onboarding/aws//wrappers"
   # Alternative source:
-  # source = "git::git@github.com:terraform-aws-modules/terraform-aws-nops-compute-copilot-asg.git//wrappers?ref=master"
+  # source = "git::git@github.com:terraform-aws-modules/terraform-aws-nops-compute-copilot-asg-onboarding.git//wrappers?ref=master"
 }
 
 inputs = {
@@ -42,7 +42,7 @@ inputs = {
 
 ```hcl
 module "wrapper" {
-  source = "terraform-aws-modules/nops-compute-copilot-asg/aws//wrappers"
+  source = "terraform-aws-modules/nops-compute-copilot-asg-onboarding/aws//wrappers"
 
   defaults = { # Default values
     create = true
