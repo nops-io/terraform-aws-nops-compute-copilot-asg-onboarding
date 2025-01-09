@@ -16,13 +16,13 @@ resource "aws_lambda_function" "nops_nasg_lambda" {
       NOPS_ASG_PROJECT_ID     = local.current_nops_project[0].id
       NOPS_ASG_ACCOUNT_NUMBER = data.aws_caller_identity.current.account_id
       NOPS_ASG_TOKEN          = var.token
-      NOPS_ASG_AUTO_UPDATE    = var.auto_update
+      NOPS_ASG_AUTO_UPDATE    = true
       NOPS_ASG_VERSION        = local.nasg_lambda_version
     }
   }
 
-  s3_bucket = "nops-${var.environment}-asg-lambda-${data.aws_region.current.id}"
-  s3_key    = "${local.nasg_lambda_version}/src/nasg-${local.nasg_lambda_version}.zip"
+  s3_bucket = local.nasg_s3_bucket
+  s3_key    = local.nasg_s3_bucket_key
 }
 
 # self test configuration
@@ -90,6 +90,33 @@ resource "aws_lambda_function" "nops_role_checker_lambda" {
   environment {
     variables = {
       account_number : data.aws_caller_identity.current.account_id
+    }
+  }
+}
+
+# Auto Update
+data "archive_file" "nops_auto_updater_lambda" {
+  type        = "zip"
+  source_file = "${path.module}/lambda/auto_updater/index.py"
+  output_path = "auto_updater.zip"
+}
+
+resource "aws_lambda_function" "nops_auto_updater_lambda" {
+  filename      = "auto_updater.zip"
+  function_name = "nOps-ASG-auto-updater-${data.aws_region.current.id}"
+  role          = aws_iam_role.nasg_auto_updater_role.arn
+  handler       = "index.lambda_handler"
+
+  source_code_hash = data.archive_file.nops_auto_updater_lambda.output_base64sha256
+
+  runtime = "python3.10"
+  timeout = 60
+
+  environment {
+    variables = {
+      NASG_LAMBDA_BUCKET : local.nasg_s3_bucket,
+      NASG_LAMBDA_BUCKET_KEY : local.nasg_s3_bucket_key,
+      NASG_LAMBDA_ARN : aws_lambda_function.nops_nasg_lambda.arn
     }
   }
 }

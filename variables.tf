@@ -8,16 +8,6 @@ variable "environment" {
   }
 }
 
-variable "auto_update" {
-  type        = string
-  description = "Whether to update the stack automatically when a new version is released or not"
-  default     = "false"
-  validation {
-    condition     = can(regex("(true|false)", var.auto_update))
-    error_message = "AutoUpdate must be either true or false."
-  }
-}
-
 variable "exclude_regions" {
   type        = string
   description = "Comma-separated list of AWS region codes to exclude from deployment (e.g., us-west-1,eu-west-3)."

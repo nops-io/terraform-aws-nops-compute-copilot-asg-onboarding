@@ -80,3 +80,27 @@ resource "aws_lambda_permission" "scheduled_check_permission" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.scheduled_check.arn
 }
+
+# EventBridge Rule for Auto Update
+resource "aws_cloudwatch_event_rule" "auto_update" {
+  name                = "nops-asg-auto-update"
+  event_bus_name      = "default"
+  schedule_expression = "rate(30 minutes)"
+  state               = "ENABLED"
+}
+
+# Target for Auto Update
+resource "aws_cloudwatch_event_target" "auto_update_target" {
+  rule           = aws_cloudwatch_event_rule.auto_update.name
+  target_id      = aws_lambda_function.nops_auto_updater_lambda.function_name
+  arn            = aws_lambda_function.nops_auto_updater_lambda.arn
+  event_bus_name = "default"
+}
+
+# Lambda permission for Auto Update
+resource "aws_lambda_permission" "auto_update_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.nops_auto_updater_lambda.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.auto_update.arn
+}

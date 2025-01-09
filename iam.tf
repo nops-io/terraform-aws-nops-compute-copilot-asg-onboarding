@@ -336,3 +336,56 @@ resource "aws_iam_role_policy_attachment" "aws_lambda_basic_execution" {
   role       = aws_iam_role.nasg_role_checker_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
+resource "aws_iam_role" "nasg_auto_updater_role" {
+  name = "nopsAutoUpdaterRole"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "nasg_auto_updater_policy" {
+  name        = "Nops-ASG-Auto-Updater-Policy"
+  description = "Policy for updating the NASG lambda function automatically"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:GetFunction",
+          "lambda:UpdateFunctionCode",
+        ]
+        Resource = [aws_lambda_function.nops_nasg_lambda.arn]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+        ]
+        Resource = ["*"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "nasg_auto_updater_policy_attachment" {
+  role       = aws_iam_role.nasg_auto_updater_role.name
+  policy_arn = aws_iam_policy.nasg_auto_updater_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "aws_lambda_basic_execution_auto_updater" {
+  role       = aws_iam_role.nasg_auto_updater_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
