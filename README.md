@@ -21,7 +21,7 @@ This module creates the necessary infrastructure on your AWS accounts to integra
 ### Compute Copilot ASG Onboarding
 
 In order to onboard your AWS account with the nOps ASG product, use the following snippet while being logged in onto the target account.
-We only support `us-east-1`and `us-west-2` as deployment regions for the main module.
+We only support `us-east-1`and `us-west-2` as deployment regions for the main module, deployment will fail if other regions are attempted.
 
 ```hcl
 terraform {
@@ -65,7 +65,7 @@ provider "nops" {
 
 module "cc_asg_forwarder" {
   source = "nops-io/nops-compute-copilot-asg-onboarding/aws//modules/forwarder"
-  # Region where the main module was deployed, either us-east-1 or us-west-2
+  # Region where the main module was deployed, either us-east-1 or us-west-2.
   nasg_central_region = "us-east-1"
 }
 ```
