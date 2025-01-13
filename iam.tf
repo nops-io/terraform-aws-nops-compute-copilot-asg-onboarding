@@ -374,7 +374,7 @@ resource "aws_iam_policy" "nasg_auto_updater_policy" {
         Action = [
           "s3:GetObject",
         ]
-        Resource = ["*"]
+        Resource = ["arn:aws:s3:::${local.nasg_s3_bucket}/*"]
       }
     ]
   })
