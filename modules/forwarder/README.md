@@ -11,10 +11,6 @@ This submodule creates the event listeners and rules to send events to the nOps 
 
 ## Usage
 
-### Compute Copilot Onboarding
-
-In order to create the necessary resources to onboard Compute Copilot into all your EKS clusters in a region use the following snippet:
-
 ```hcl
 terraform {
   required_providers {
@@ -31,8 +27,10 @@ provider "nops" {
   nops_api_key = "XXXX.XXXXXX"
 }
 
-module "cc_asg" {
-  source =""
+module "cc_asg_forwarder" {
+  source = "nops-io/nops-compute-copilot-asg-onboarding/aws//modules/forwarder"
+  # Region where the main module was deployed, either us-east-1 or us-west-2
+  nasg_central_region = "us-east-1"
 }
 ```
 

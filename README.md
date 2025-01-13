@@ -1,12 +1,13 @@
-# nOps AWS Compute Copilot Onboarding Terraform Module
+# nOps AWS Compute Copilot ASG Onboarding Terraform Module
 
 ## Description
-This module created the necessary infrastructure on your AWS accounts to integrate the Compute Copilot nASG product on your environment.
+This module creates the necessary infrastructure on your AWS accounts to integrate the nOps Compute Copilot ASG product with your environments.
 
 ## Features
 - Creation of a nASG Lambda and related resources such as event bus to react to EC2 events
-- Creation of IAM roles with minimum privileges for the Lambda to run
+- Creation of IAM roles with minimum privileges for the Lambdas to run
 - Self test and checks when deploying
+- Auto update of main Lambda when a new version is deployed
 - Integration with nOps APIs for metadata fetching
 
 ## Prerequisites
@@ -17,9 +18,10 @@ This module created the necessary infrastructure on your AWS accounts to integra
 
 ## Usage
 
-### Compute Copilot Onboarding
+### Compute Copilot ASG Onboarding
 
-In order to create the necessary resources to onboard Compute Copilot into all your EKS clusters in a region use the following snippet:
+In order to onboard your AWS account with the nOps ASG product, use the following snippet while being logged in onto the target account.
+We only support `us-east-1`and `us-west-2` as deployment regions for the main module.
 
 ```hcl
 terraform {
@@ -38,7 +40,33 @@ provider "nops" {
 }
 
 module "cc_asg" {
-  source =""
+  source = "nops-io/nops-compute-copilot-asg-onboarding/aws"
+  token = "XXXX.XXXXXXXXX"
+}
+```
+
+After the previous deployment finishes, onboard additional regions by deploying the `forwarder` submodule into the desired regions.
+
+```hcl
+terraform {
+  required_providers {
+    nops = {
+      source = "nops-io/nops"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+    }
+  }
+}
+
+provider "nops" {
+  nops_api_key = "XXXX.XXXXXX"
+}
+
+module "cc_asg_forwarder" {
+  source = "nops-io/nops-compute-copilot-asg-onboarding/aws//modules/forwarder"
+  # Region where the main module was deployed, either us-east-1 or us-west-2
+  nasg_central_region = "us-east-1"
 }
 ```
 
