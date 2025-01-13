@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/compare/v1.0.1...v1.1.0) (2025-01-13)
+
+
+### Features
+
+* releasing updated docs ([#4](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/issues/4)) ([2323b1a](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/commit/2323b1a4b664d9cf7810c002866c5407b0cffc14))
+
 ## [1.0.1](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/compare/v1.0.0...v1.0.1) (2025-01-13)
 
 
