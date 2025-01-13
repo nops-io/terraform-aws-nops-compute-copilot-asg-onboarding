@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/compare/v1.0.0...v1.0.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* adding resource constraint on s3 policy ([#2](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/issues/2)) ([8657255](https://github.com/nops-io/terraform-aws-nops-compute-copilot-asg-onboarding/commit/86572553625ba288cf21e9b3fb549201c92fa3e4))
+
 ## 1.0.0 (2025-01-09)
 
 
